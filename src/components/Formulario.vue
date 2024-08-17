@@ -41,6 +41,17 @@ const validar = () => {
     return
   }
     emit('guardar-paciente')
+    alerta.mensaje = 'Paciente Almacenado Correctamente'
+    alerta.tipo = 'exito'
+
+    setTimeout(() =>{
+      Object.assign(alerta, {
+          tipo: '',
+          mensaje: ''
+      })
+    
+    }, 24000)
+ 
 }
 
 </script>
