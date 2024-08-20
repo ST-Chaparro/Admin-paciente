@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive} from 'vue'
+import {ref, reactive, watch, onMounted } from 'vue'
 import { uid } from 'uid'
 import Header from './components/Header.vue';
 import Formulario from './components/Formulario.vue';
@@ -16,10 +16,26 @@ const paciente = reactive({
     sintomas: ''
 })
 
+watch(pacientes, () => {
+  guardarLocalStorage()
+}, {
+  deep: true
+})
+
+const guardarLocalStorage = () => {
+  localStorage.setItem('pacientes',JSON.stringify(pacientes.value))
+}
+onMounted(() => {
+  const pacientesStorage = localStorage.getItem('pacientes')
+  if(pacientesStorage){
+    pacientes.value = JSON.parse(pacientesStorage)
+  }
+})
+
 const guardarPaciente  = () => {
   if(paciente.id) {
      const { id } = paciente
-    const i = pacientes.value.findIndex((pacienteState) => pacienteState.id === id)
+    const i = pacientes.value.findIndex(pacienteState => pacienteState.id === id)
     pacientes.value[i] = {...paciente}
 
   }else {
@@ -55,7 +71,7 @@ const  actualizarPaciente = (id) => {
 
 
 const eliminarPaciente = (id) => {
-  console.log(id)
+    paciente.value = pacientes.value.filter(paciente => paciente.id !== id)
  }
 
 </script>
